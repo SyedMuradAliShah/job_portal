@@ -76,9 +76,9 @@ $query_builder = TRUE;
 $db['default'] = array(
 	'dsn'	=> '',
 	'hostname' => 'localhost',
-	'username' => 'root',
-	'password' => '',
-	'database' => 'jb',
+	'username' => ($_SERVER['SERVER_NAME'] == "localhost") ? 'root':'techdino_jp',
+	'password' => ($_SERVER['SERVER_NAME'] == "localhost") ? '':'techdino_jp',
+	'database' => ($_SERVER['SERVER_NAME'] == "localhost") ? 'jb':'techdino_jp',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
