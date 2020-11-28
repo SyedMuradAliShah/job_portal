@@ -254,7 +254,7 @@
                       </div>
                     </div>
                     <div class="inbox_chat scroll">
-                      <?php if ($one2one_users) : ?>
+                      <?php if (@$one2one_users) : ?>
                         <?php foreach ($one2one_users as $chat_user) :  ?>
                           <div class="chat_list <?= ($chat_user['jobseeker_id'] == $this->uri->segment(3)) ? 'active_chat' : '' ?>" onclick="location.href = '<?= base_url('employer/chat/') . $chat_user['jobseeker_id'] ?>';">
                             <div class="chat_people">
@@ -278,10 +278,10 @@
                     </div>
                   </div>
                   <div class="mesgs">
-                    <div class="msg_history" style="<?= ($one2one_chats) ? '' : 'text-align: center;' ?>">
-                      <?php if ($one2one_chats) : ?>
-                        <?php $i = 0;
-                        foreach ($one2one_chats as $one2one_chat) :  ?>
+                    <div class="msg_history" style="<?= (@$one2one_chats) ? '' : 'text-align: center;' ?>">
+                      <?php $i = 0;
+                      if (@$one2one_chats) : ?>
+                        <?php foreach ($one2one_chats as $one2one_chat) :  ?>
                           <?php if ($one2one_chat['sent_from'] == $this->uri->segment(1)) : ?>
                             <div class="outgoing_msg">
                               <div class="sent_msg">
@@ -311,7 +311,7 @@
                         <input type="text" id="message" class="write_msg" placeholder="Type a message" autocomplete="off" />
                         <button class="msg_send_btn" type="button"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
                       </div>
-                      <input type="hidden" value="<?= $i ?>" id="last_chat_id" />
+                      <input type="hidden" value="<?= @$i ?>" id="last_chat_id" />
                     </div>
                   </div>
                 </div>
