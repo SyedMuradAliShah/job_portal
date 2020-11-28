@@ -277,7 +277,8 @@
                   </div>
                   <div class="mesgs">
                     <div class="msg_history" style="<?= (@$one2one_chats) ? '' : 'text-align: center;' ?>">
-                      <?php  $i = 0; if (@$one2one_chats) : ?>
+                      <?php $i = 0;
+                      if (@$one2one_chats) : ?>
                         <?php foreach ($one2one_chats as $one2one_chat) :  ?>
                           <?php if ($one2one_chat['sent_from'] == 'job_seeker') :  ?>
                             <div class="outgoing_msg">
@@ -305,7 +306,7 @@
                     </div>
                     <div class="type_msg">
                       <div class="input_msg_write">
-                        <input type="text" id="message" class="write_msg" placeholder="Type a message" autocomplete="off"/>
+                        <input type="text" id="message" class="write_msg" placeholder="Type a message" autocomplete="off" />
                         <button class="msg_send_btn" type="button"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
                       </div>
                       <input type="hidden" value="<?= $i ?>" id="last_chat_id" />
@@ -331,13 +332,16 @@
           function(data, status) {
             // alert("Data: " + data + "\nStatus: " + status);
             $('#message').val('');
-            get_chat();
+            // get_chat();
+            if (data['error'] == true) {
+              alert(data['response']);
+            }
           });
       });
       $(".refresh_chat").click(function() {
         get_chat();
       });
-      setInterval(function() {
+      let myVar = setInterval(function() {
         get_chat();
       }, 400);
       $(".msg_history").scrollTop($(".msg_history")[0].scrollHeight);
@@ -346,6 +350,7 @@
         var last_chat_id = $('#last_chat_id').val();
         $.get("<?= base_url($this->uri->segment(1) . '/' . $this->uri->segment(2) . '/get_chat/' . $this->uri->segment(3)) ?>/" + last_chat_id, function(data, status) {
           if (data['error'] == false) {
+            clearInterval(myVar);
             $.each(data['response'], function(key, value) {
               // alert(key + ": " + value['message']);
               if (value['sent_from'] == 'job_seeker') {
@@ -371,9 +376,12 @@
                 );
                 // $(".msg_history").append(value['message']);
               }
-              $(".msg_history").scrollTop($(".msg_history")[0].scrollHeight);
-              $('#last_chat_id').val(parseInt(last_chat_id) + 1);
             });
+            myVar = setInterval(function() {
+              get_chat();
+            }, 400);
+            $(".msg_history").scrollTop($(".msg_history")[0].scrollHeight);
+            $('#last_chat_id').val(parseInt(last_chat_id) + parseInt(data['response'].length));
           }
         });
       }

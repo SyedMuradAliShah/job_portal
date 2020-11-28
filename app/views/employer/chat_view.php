@@ -334,13 +334,16 @@
           function(data, status) {
             // alert("Data: " + data + "\nStatus: " + status);
             $('#message').val('');
-            get_chat();
+            // get_chat();
+            if (data['error'] == true) {
+              alert(data['response']);
+            }
           });
       });
       $(".refresh_chat").click(function() {
         get_chat();
       });
-      setInterval(function() {
+      let myVar = setInterval(function() {
         get_chat();
       }, 400);
       $(".msg_history").scrollTop($(".msg_history")[0].scrollHeight);
@@ -349,6 +352,7 @@
         var last_chat_id = $('#last_chat_id').val();
         $.get("<?= base_url($this->uri->segment(1) . '/' . $this->uri->segment(2) . '/get_chat/' . $this->uri->segment(3)) ?>/" + last_chat_id, function(data, status) {
           if (data['error'] == false) {
+            clearInterval(myVar);
             $.each(data['response'], function(key, value) {
               // alert(key + ": " + value['message']);
               if (value['sent_from'] == 'employer') {
@@ -374,9 +378,12 @@
                 );
                 // $(".msg_history").append(value['message']);
               }
-              $(".msg_history").scrollTop($(".msg_history")[0].scrollHeight);
-              $('#last_chat_id').val(parseInt(last_chat_id) + 1);
             });
+            myVar = setInterval(function() {
+              get_chat();
+            }, 400);
+            $(".msg_history").scrollTop($(".msg_history")[0].scrollHeight);
+            $('#last_chat_id').val(parseInt(last_chat_id) + parseInt(data['response'].length));
           }
         });
       }
