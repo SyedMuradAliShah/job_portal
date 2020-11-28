@@ -326,6 +326,12 @@
     <?php $this->load->view('common/footer'); ?>
     <?php $this->load->view('common/before_body_close'); ?>
     <script>
+      $('.write_msg').keypress(function(e) {
+        if (e.which == 13) {
+          $('.msg_send_btn').click();
+          return false; //<---- Add this line
+        }
+      });
       $(".msg_send_btn").click(function() {
         var message = $('#message').val();
         $.post("<?= base_url($this->uri->segment(1) . '/' . $this->uri->segment(2) . '/one2one_send/' . $this->uri->segment(3)) ?>", {
