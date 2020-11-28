@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /*
 | -------------------------------------------------------------------------
@@ -73,18 +73,18 @@ $route['employer-signup'] = 'Employer_signup';
 $route['jobseeker-signup'] = 'Jobseeker_signup';
 $route['contact-us'] = 'Contact_us';
 //Employer Section
-$route['employer/job_applications/send_message_to_candidate'] 	= 'Employer/job_applications/send_message_to_candidate/$1';
-$route['employer/job_applications/(:any)'] 	= 'Employer/job_applications/index/$1';
-$route['employer/my_posted_jobs/(:any)'] 	= 'Employer/my_posted_jobs/index/$1';
-$route['employer/edit_posted_job/(:num)'] 	= 'Employer/edit_posted_job/index/$1';
+$route['employer/job_applications/send_message_to_candidate']     = 'Employer/job_applications/send_message_to_candidate/$1';
+$route['employer/job_applications/(:any)']     = 'Employer/job_applications/index/$1';
+$route['employer/my_posted_jobs/(:any)']     = 'Employer/my_posted_jobs/index/$1';
+$route['employer/edit_posted_job/(:num)']     = 'Employer/edit_posted_job/index/$1';
 
 //Backend
-$route['admin/employers/(:num)'] 	= 'admin/Employers/index/$1';
+$route['admin/employers/(:num)']     = 'admin/Employers/index/$1';
 $route['admin/job_seekers/(:num)'] = 'admin/Job_seekers/index/$1';
 $route['admin/posted_jobs/(:num)'] = 'admin/Posted_jobs/index/$1';
 
 $route['admin/menu/load_menu_pages/(:num)'] = 'admin/Menu/load_menu_pages/$1';
 
 
-$route['employer/chat/(:num)'] 	= 'Employer/chat/open_chat/$1';
-$route['jobseeker/chat/(:num)'] 	= 'Jobseeker/chat/open_chat/$1';
+$route['employer/chat/(:num)']     = 'employer/chat/open_chat/$1';
+$route['jobseeker/chat/(:num)']     = 'jobseeker/chat/open_chat/$1';
