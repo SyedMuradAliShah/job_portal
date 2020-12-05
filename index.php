@@ -58,7 +58,7 @@
 //	ini_set('memory_limit', '-1');
 date_default_timezone_set("Asia/Karachi");
 $_SERVER['CI_ENV'] = ($_SERVER['SERVER_NAME'] == "localhost") ? 'development' : 'production';
-define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'development');
+define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'production');
 /*
  *---------------------------------------------------------------
  * ERROR REPORTING

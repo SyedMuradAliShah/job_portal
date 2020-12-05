@@ -46,6 +46,7 @@ class User_model extends CI_Model
       $this->db->or_where('tbl_chat.user_id_to_employer', $personal_user_id);
       // $this->db->group_by('tbl_chat.user_id_to_employer, tbl_chat.user_id_from_employer');
     }
+    $this->db->order_by('tbl_chat.sent_on', 'desc');
 
     $query = $this->db->get('tbl_chat');
     // echo $this->db->last_query();
@@ -58,7 +59,7 @@ class User_model extends CI_Model
 
 
 
-  public function one2one_get($other_user_id, $personal_user_id, $offset= NULL)
+  public function one2one_get($other_user_id, $personal_user_id, $offset = NULL)
   {
     $this->db->select('tbl_chat.chat_id, tbl_chat.message, tbl_chat.sent_from, tbl_chat.sent_on, tbl_employers.first_name as employer_name, tbl_job_seekers.first_name as jobseeker_name');
     $this->db->join('tbl_employers', 'tbl_employers.ID = tbl_chat.user_id_from_employer OR tbl_employers.ID = tbl_chat.user_id_to_employer', 'left');

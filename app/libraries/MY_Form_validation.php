@@ -28,18 +28,18 @@ class MY_Form_validation extends CI_Form_validation {
         return $spam_validation;
     }
     public function time_diff($str) {
-        $CI = & get_instance();
-        $CI->form_validation->set_message('time_diff', 'Cant send mail too frequently.');
-        $spam_validation = true;
-        $timestm = $CI->session->userdata('timestm');
-        if (isset($timestm) && !empty($timestm)) {
-            $mailtime = eventtime($CI->session->userdata('timestm'), 5);
-            //echo $mailtime ;exit;
-            if ($mailtime == 'false') {
-                $spam_validation = false;
-            }
-        }
-        return $spam_validation;
+        // $CI = & get_instance();
+        // $CI->form_validation->set_message('time_diff', 'Cant send mail too frequently.');
+        // $spam_validation = true;
+        // $timestm = $CI->session->userdata('timestm');
+        // if (isset($timestm) && !empty($timestm)) {
+        //     $mailtime = eventtime($CI->session->userdata('timestm'), 5);
+        //     //echo $mailtime ;exit;
+        //     if ($mailtime == 'false') {
+        //         $spam_validation = false;
+        //     }
+        // }
+        // return $spam_validation;
     }
     public function file_required($str) {
         if (!is_array($str)) {

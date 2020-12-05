@@ -123,11 +123,11 @@ class Post_New_Job extends CI_Controller {
 	
 	private function check_employer_job_status($row,$row_settings){
 		$return = 'yes';
-		if($row_settings->payment_plan=='1'){
-			if($row->allowed_job_qty<1){
-				$return = 'no';	
-			}
-		}
+		// if(@$row_settings->payment_plan=='1'){
+		// 	if($row->allowed_job_qty<1){
+		// 		$return = 'no';	
+		// 	}
+		// }
 		return $return;
 	}
 }

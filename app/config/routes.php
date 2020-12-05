@@ -88,3 +88,6 @@ $route['admin/menu/load_menu_pages/(:num)'] = 'admin/Menu/load_menu_pages/$1';
 
 $route['employer/chat/(:num)']     = 'employer/chat/open_chat/$1';
 $route['jobseeker/chat/(:num)']     = 'jobseeker/chat/open_chat/$1';
+
+
+$route['employer/qrcode/(:num)']     = 'employer/qrcode/index/$1';
