@@ -94,6 +94,261 @@ class User extends CI_Controller
 		echo $this->api->error_response('Bad Request');
 		return;
 	}
+	public function skills()
+	{
+		if (is_post()) {
+			if (ENVIRONMENT == 'development')
+				if ($this->input->post('params_info') == true) {
+					$data = [
+						'Method' => 'POST',
+						'Accepted paramters' => [
+							'user_id' => 'INT'
+						],
+						'Note' => ['At least 3 skills allowed']
+					];
+					echo json($data);
+					return;
+				}
+			$this->form_validation->set_rules('user_id', 'user_id', 'trim|required');
+			if ($this->form_validation->run() == FALSE) {
+				echo $this->api->error_response(validation_errors());
+				return;
+			}
+			$result = $this->jobseeker_skills_model->get_records_by_seeker_id($this->input->post('user_id'));
+			$data['result'] = $result;
+			if ($result == 0)
+				$data['count_skills'] = $result;
+			else
+				$data['count_skills'] = count($result);
+				
+			echo $this->api->success_response($data);
+			return;
+		}
+	}
+	public function add_skills()
+	{
+		if (is_post()) {
+			if (ENVIRONMENT == 'development')
+				if ($this->input->post('params_info') == true) {
+					$data = [
+						'Method' => 'POST',
+						'Accepted paramters' => [
+							'user_id' => 'INT',
+							'skill' => 'string(100)',
+						],
+						'Note' => []
+					];
+					echo json($data);
+					return;
+				}
+			$this->form_validation->set_rules('user_id', 'user_id', 'trim|required');
+			$this->form_validation->set_rules('skill', 'skill name', 'trim|required');
+			if ($this->form_validation->run() == FALSE) {
+				echo $this->api->error_response(validation_errors());
+				return;
+			}
+
+			$skill = trim(strtolower($this->input->post('skill')));
+			$skill = strip_tags($skill);
+
+			$row = $this->jobseeker_skills_model->get_records_by_seeker_id_skill_name($this->input->post('user_id'), $skill);
+			if ($row) {
+				echo $this->api->error_response("This skill is already added.");
+				exit;
+			}
+
+			$data_array = array('seeker_ID' => $this->input->post('user_id'), 'skill_name' => $skill);
+			$this->jobseeker_skills_model->add($data_array);
+			$this->jobseeker_skills_model->count_jobseeker_skills_by_seeker_id($this->input->post('user_id'));
+			echo $this->api->success_response_std('Skill has been added successfully');
+			exit;
+		}
+	}
+
+	public function remove_skills()
+	{
+		if (is_post()) {
+			if (ENVIRONMENT == 'development')
+				if ($this->input->post('params_info') == true) {
+					$data = [
+						'Method' => 'POST',
+						'Accepted paramters' => [
+							'user_id' => 'INT',
+							'skill_id' => 'INT',
+						],
+						'Note' => []
+					];
+					echo json($data);
+					return;
+				}
+
+			$this->form_validation->set_rules('user_id', 'user_id', 'trim|required');
+			$this->form_validation->set_rules('skill_id', 'skill_id', 'trim|required');
+			if ($this->form_validation->run() == FALSE) {
+				echo $this->api->error_response(validation_errors());
+				return;
+			}
+			$res = $this->jobseeker_skills_model->delete($this->input->post('skill_id'));
+			$this->jobseeker_skills_model->count_jobseeker_skills_by_seeker_id($this->input->post('user_id'));
+
+			if ($res) {
+				echo $this->api->success_response_std('Skill has been removed successfully');
+				exit;
+			}
+			echo $this->api->error_response('Unable to remove this skill');
+			return;
+		}
+	}
+	public function countries()
+	{
+		$result_countries = $this->countries_model->get_all_countries();
+		echo $this->api->success_response_std('', $result_countries);
+	}
+	public function register()
+	{
+		if (is_post()) {
+			if (ENVIRONMENT == 'development')
+				if ($this->input->post('params_info') == true) {
+					$data = [
+						'Method' => 'POST',
+						'Accepted paramters' => [
+							'email' => 'string(100)',
+							'pass' => [
+								'minimum' => 6,
+								'maximum' => 100
+							],
+							'full_name' => 'string(100)',
+							'gender' => 'Male | Female',
+							'dob_day' => 'dd',
+							'dob_month' => 'mm',
+							'dob_year' => 'YY',
+							'dob_year' => 'YY',
+							'dob_year' => 'YY',
+							'current_address' => 'string(100)',
+							'city' => 'string(100)',
+							'country' => 'string(100), from the /api/user/countries',
+							'nationality' => 'string(100), from the /api/user/countries',
+							'mobile_number' => 'INT',
+							'phone' => 'OPTIONAL | INT',
+							'cv_file' => 'Multipart file only in doc, docx, pdf, rtf, jpg, txt format with maximum size of 6 MB',
+						],
+						'Note' => ['NOTE CV file must be in multipart.']
+					];
+					echo json($data);
+					return;
+				}
+			$this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email|is_unique[tbl_job_seekers.email]|strip_all_tags');
+			$this->form_validation->set_rules('pass', 'Password', 'trim|required|min_length[6]|strip_all_tags');
+			$this->form_validation->set_rules('full_name', 'Full name', 'trim|required|strip_all_tags');
+			$this->form_validation->set_rules('gender', 'Gender', 'trim|required|strip_all_tags');
+			$this->form_validation->set_rules('dob_day', 'dob_day', 'trim|required|strip_all_tags');
+			$this->form_validation->set_rules('dob_month', 'dob_month', 'trim|required|strip_all_tags');
+			$this->form_validation->set_rules('dob_year', 'dob_year', 'trim|required|strip_all_tags');
+			$this->form_validation->set_rules('current_address', 'Current address', 'trim|required|strip_all_tags');
+			$this->form_validation->set_rules('country', 'Country', 'trim|required|strip_all_tags');
+			$this->form_validation->set_rules('city', 'City', 'trim|required|strip_all_tags');
+			$this->form_validation->set_rules('nationality', 'Nationality', 'trim|required|strip_all_tags');
+			$this->form_validation->set_rules('mobile_number', 'Mobile', 'trim|required|strip_all_tags');
+			$this->form_validation->set_rules('phone', 'Phone', 'trim|strip_all_tags');
+			$this->form_validation->set_message('is_unique', 'The %s is already taken');
+
+			if (empty($_FILES['cv_file']['name']))
+				$this->form_validation->set_rules('cv_file', 'Resume', 'required');
+
+			if ($this->form_validation->run() == FALSE) {
+				echo $this->api->error_response(validation_errors());
+				return;
+			}
+
+			try {
+
+				if (!empty($_FILES['cv_file']['name'])) {
+					$current_date = date("Y-m-d H:i:s");
+					$job_seeker_array = array(
+						'first_name' => $this->input->post('full_name'),
+						'email' => $this->input->post('email'),
+						'password' => $this->input->post('pass'),
+						'dob' => $this->input->post('dob_year') . '-' . $this->input->post('dob_month') . '-' . $this->input->post('dob_day'),
+						'mobile' => $this->input->post('mobile_number'),
+						'home_phone' => $this->input->post('phone'),
+						'present_address' => $this->input->post('current_address'),
+						'country' => $this->input->post('country'),
+						'city' => $this->input->post('city'),
+						'nationality' => $this->input->post('nationality'),
+						'gender' => $this->input->post('gender'),
+						'ip_address' => $this->input->ip_address(),
+						'dated' => $current_date
+					);
+					$extention = get_file_extension($_FILES['cv_file']['name']);
+					$allowed_types = array('doc', 'docx', 'pdf', 'rtf', 'jpg', 'png', 'txt');
+
+					if (!in_array($extention, $allowed_types)) {
+						echo $this->api->error_response('This file type is not allowed.');
+						return;
+					}
+
+					$seeker_id = $this->job_seekers_model->add_job_seekers($job_seeker_array);
+					$resume_array = array();
+					$real_path = realpath(APPPATH . '../public/uploads/candidate/resumes/');
+					$config['upload_path'] = $real_path;
+					$config['allowed_types'] = 'doc|docx|pdf|rtf|jpg|png|txt';
+					$config['overwrite'] = true;
+					$config['max_size'] = 6000;
+					$config['file_name'] = replace_string(' ', '-', strtolower($this->input->post('full_name'))) . '-' . $seeker_id;
+					$this->upload->initialize($config);
+					if (!$this->upload->do_upload('cv_file')) {
+						$this->job_seekers_model->delete_job_seeker($seeker_id);
+						echo $this->api->error_response($this->upload->display_errors());
+						return;
+					}
+					$resume = array('upload_data' => $this->upload->data());
+					$resume_file_name = $resume['upload_data']['file_name'];
+					$resume_array = array(
+						'seeker_ID' => $seeker_id,
+						'file_name' => $resume_file_name,
+						'dated' => $current_date,
+						'is_uploaded_resume' => 'yes'
+
+					);
+					$this->resume_model->add($resume_array);
+					$this->jobseeker_additional_info_model->add(array('seeker_ID' => $seeker_id));
+					$user_data = array(
+						'user_id' => $seeker_id,
+						'user_email' => $this->input->post('email'),
+						'first_name' => $this->input->post('full_name'),
+						'slug' => '',
+						'last_name' => '',
+						'is_user_login' => TRUE,
+						'is_job_seeker' => TRUE,
+						'is_employer' => FALSE
+					);
+
+					//Sending email to the user
+					$row_email = $this->email_model->get_records_by_id(2);
+
+					$config = $this->email_drafts_model->email_configuration();
+					$this->email->initialize($config);
+					$this->email->clear(TRUE);
+					$this->email->from($row_email->from_email, $row_email->from_name);
+					$this->email->to($this->input->post('email'));
+					$mail_message = $this->email_drafts_model->jobseeker_signup($row_email->content, $job_seeker_array);
+					$this->email->subject($row_email->subject);
+					$this->email->message($mail_message);
+					$this->email->send();
+
+					echo $this->api->success_response_std('Registration successfull', $user_data);
+					return;
+				}
+			} catch (\Exception $e) {
+				header("HTTP/1.0 500 Internal Server Error");
+				echo $this->api->error_response('Registration failed');
+				return;
+			}
+		}
+		header("HTTP/1.0 400 Bad Request");
+		echo $this->api->error_response('Bad Request');
+		return;
+	}
 
 	public function one2one_send()
 	{
@@ -146,8 +401,6 @@ class User extends CI_Controller
 		echo $this->api->error_response('Bad Request');
 		return;
 	}
-
-
 
 	public function one2one_get()
 	{
@@ -229,17 +482,17 @@ class User extends CI_Controller
 					$reseponse = [];
 					// $i = 1;
 					foreach ($data as $user) :
-						if ($status == 'jobseeker' && ($user->sent_from == 'employer' || $user->sent_from == 'jobseeker'))  :
+						if ($status == 'jobseeker' && ($user->sent_from == 'employer' || $user->sent_from == 'jobseeker')) :
 							$reseponse[$user->employer_id]['employer_id'] = $user->employer_id;
 							$reseponse[$user->employer_id]['name'] = $user->employer_name;
 							$reseponse[$user->employer_id]['last_message'] = $user->message;
-							// $i++;
+						// $i++;
 						endif;
 						if ($status == 'employer' && ($user->sent_from == 'employer' || $user->sent_from == 'jobseeker')) :
 							$reseponse[$user->jobseeker_id]['jobseeker_id'] = $user->jobseeker_id;
 							$reseponse[$user->jobseeker_id]['name'] = $user->jobseeker_name;
 							$reseponse[$user->jobseeker_id]['last_message'] = $user->message;
-							// $i++;
+						// $i++;
 						endif;
 					endforeach;
 

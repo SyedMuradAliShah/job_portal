@@ -34,7 +34,6 @@ class Jobseeker_signup extends CI_Controller {
 		$this->form_validation->set_rules('mobile_number', 'Mobile', 'trim|required|strip_all_tags');
 		$this->form_validation->set_rules('phone', 'Phone', 'trim|strip_all_tags');
 		$this->form_validation->set_rules('captcha', 'Verification code', 'trim|required|callback_check_captcha');
-		
 		$this->form_validation->set_message('is_unique', 'The %s is already taken');
 		
 		if (empty($_FILES['cv_file']['name']))
@@ -67,9 +66,7 @@ class Jobseeker_signup extends CI_Controller {
 		
 		
 		if (!empty($_FILES['cv_file']['name'])){
-			
 			//$verification_code = md5(time());
-			
 			$extention = get_file_extension($_FILES['cv_file']['name']);
 			$allowed_types = array('doc','docx','pdf','rtf','jpg','txt');
 			
