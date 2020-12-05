@@ -31,3 +31,23 @@ Chat services
 - http://techdino.tk/api/user/one2one_send
 
 //--End--Chat--//
+
+
+//NEW ADDED
+
+- http://techdino.tk/api/matching_jobs
+
+- http://techdino.tk/api/job_search
+
+- http://techdino.tk/api/apply_job
+
+- http://techdino.tk/api/company
+
+- http://techdino.tk/api/my_account
+
+- http://techdino.tk/api/my_update
+
+- http://techdino.tk/api/change_password
+
+
+
