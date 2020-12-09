@@ -230,7 +230,7 @@ class User extends CI_Controller
 							'nationality' => 'string(100), from the /api/user/countries',
 							'mobile_number' => 'INT',
 							'phone' => 'OPTIONAL | INT',
-							'cv_file' => 'Multipart file only in doc, docx, pdf, rtf, jpg, txt format with maximum size of 6 MB',
+							// 'cv_file' => 'Multipart file only in doc, docx, pdf, rtf, jpg, txt format with maximum size of 6 MB',
 						],
 						'Note' => ['NOTE CV file must be in multipart.']
 					];
@@ -252,8 +252,8 @@ class User extends CI_Controller
 			$this->form_validation->set_rules('phone', 'Phone', 'trim|strip_all_tags');
 			$this->form_validation->set_message('is_unique', 'The %s is already taken');
 
-			if (empty($_FILES['cv_file']['name']))
-				$this->form_validation->set_rules('cv_file', 'Resume', 'required');
+			// if (empty($_FILES['cv_file']['name']))
+			// 	$this->form_validation->set_rules('cv_file', 'Resume', 'required');
 
 			if ($this->form_validation->run() == FALSE) {
 				echo $this->api->error_response(validation_errors());
