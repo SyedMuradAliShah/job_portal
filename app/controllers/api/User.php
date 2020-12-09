@@ -120,7 +120,7 @@ class User extends CI_Controller
 				$data['count_skills'] = $result;
 			else
 				$data['count_skills'] = count($result);
-				
+
 			echo $this->api->success_response($data);
 			return;
 		}
@@ -262,83 +262,84 @@ class User extends CI_Controller
 
 			try {
 
-				if (!empty($_FILES['cv_file']['name'])) {
-					$current_date = date("Y-m-d H:i:s");
-					$job_seeker_array = array(
-						'first_name' => $this->input->post('full_name'),
-						'email' => $this->input->post('email'),
-						'password' => $this->input->post('pass'),
-						'dob' => $this->input->post('dob_year') . '-' . $this->input->post('dob_month') . '-' . $this->input->post('dob_day'),
-						'mobile' => $this->input->post('mobile_number'),
-						'home_phone' => $this->input->post('phone'),
-						'present_address' => $this->input->post('current_address'),
-						'country' => $this->input->post('country'),
-						'city' => $this->input->post('city'),
-						'nationality' => $this->input->post('nationality'),
-						'gender' => $this->input->post('gender'),
-						'ip_address' => $this->input->ip_address(),
-						'dated' => $current_date
-					);
-					$extention = get_file_extension($_FILES['cv_file']['name']);
-					$allowed_types = array('doc', 'docx', 'pdf', 'rtf', 'jpg', 'png', 'txt');
+				// if (!empty($_FILES['cv_file']['name'])) {
+				$current_date = date("Y-m-d H:i:s");
+				$job_seeker_array = array(
+					'first_name' => $this->input->post('full_name'),
+					'email' => $this->input->post('email'),
+					'password' => $this->input->post('pass'),
+					'dob' => $this->input->post('dob_year') . '-' . $this->input->post('dob_month') . '-' . $this->input->post('dob_day'),
+					'mobile' => $this->input->post('mobile_number'),
+					'home_phone' => $this->input->post('phone'),
+					'present_address' => $this->input->post('current_address'),
+					'country' => $this->input->post('country'),
+					'city' => $this->input->post('city'),
+					'nationality' => $this->input->post('nationality'),
+					'gender' => $this->input->post('gender'),
+					'ip_address' => $this->input->ip_address(),
+					'dated' => $current_date
+				);
+				// $extention = get_file_extension($_FILES['cv_file']['name']);
+				// $allowed_types = array('doc', 'docx', 'pdf', 'rtf', 'jpg', 'png', 'txt');
 
-					if (!in_array($extention, $allowed_types)) {
-						echo $this->api->error_response('This file type is not allowed.');
-						return;
-					}
+				// if (!in_array($extention, $allowed_types)) {
+				// 	echo $this->api->error_response('This file type is not allowed.');
+				// 	return;
+				// }
 
-					$seeker_id = $this->job_seekers_model->add_job_seekers($job_seeker_array);
-					$resume_array = array();
-					$real_path = realpath(APPPATH . '../public/uploads/candidate/resumes/');
-					$config['upload_path'] = $real_path;
-					$config['allowed_types'] = 'doc|docx|pdf|rtf|jpg|png|txt';
-					$config['overwrite'] = true;
-					$config['max_size'] = 6000;
-					$config['file_name'] = replace_string(' ', '-', strtolower($this->input->post('full_name'))) . '-' . $seeker_id;
-					$this->upload->initialize($config);
-					if (!$this->upload->do_upload('cv_file')) {
-						$this->job_seekers_model->delete_job_seeker($seeker_id);
-						echo $this->api->error_response($this->upload->display_errors());
-						return;
-					}
-					$resume = array('upload_data' => $this->upload->data());
-					$resume_file_name = $resume['upload_data']['file_name'];
-					$resume_array = array(
-						'seeker_ID' => $seeker_id,
-						'file_name' => $resume_file_name,
-						'dated' => $current_date,
-						'is_uploaded_resume' => 'yes'
+				$seeker_id = $this->job_seekers_model->add_job_seekers($job_seeker_array);
+				// $resume_array = array();
+				// $real_path = realpath(APPPATH . '../public/uploads/candidate/resumes/');
+				// $config['upload_path'] = $real_path;
+				// $config['allowed_types'] = 'doc|docx|pdf|rtf|jpg|png|txt';
+				// $config['overwrite'] = true;
+				// $config['max_size'] = 6000;
+				// $config['file_name'] = replace_string(' ', '-', strtolower($this->input->post('full_name'))) . '-' . $seeker_id;
+				// $this->upload->initialize($config);
+				// if (!$this->upload->do_upload('cv_file')) {
+				// 	$this->job_seekers_model->delete_job_seeker($seeker_id);
+				// 	echo $this->api->error_response($this->upload->display_errors());
+				// 	return;
+				// }
+				// $resume = array('upload_data' => $this->upload->data());
+				// $resume_file_name = $resume['upload_data']['file_name'];
+				$resume_file_name = 'xyz.png';
+				$resume_array = array(
+					'seeker_ID' => $seeker_id,
+					'file_name' => $resume_file_name,
+					'dated' => $current_date,
+					'is_uploaded_resume' => 'yes'
 
-					);
-					$this->resume_model->add($resume_array);
-					$this->jobseeker_additional_info_model->add(array('seeker_ID' => $seeker_id));
-					$user_data = array(
-						'user_id' => $seeker_id,
-						'user_email' => $this->input->post('email'),
-						'first_name' => $this->input->post('full_name'),
-						'slug' => '',
-						'last_name' => '',
-						'is_user_login' => TRUE,
-						'is_job_seeker' => TRUE,
-						'is_employer' => FALSE
-					);
+				);
+				$this->resume_model->add($resume_array);
+				$this->jobseeker_additional_info_model->add(array('seeker_ID' => $seeker_id));
+				$user_data = array(
+					'user_id' => $seeker_id,
+					'user_email' => $this->input->post('email'),
+					'first_name' => $this->input->post('full_name'),
+					'slug' => '',
+					'last_name' => '',
+					'is_user_login' => TRUE,
+					'is_job_seeker' => TRUE,
+					'is_employer' => FALSE
+				);
 
-					//Sending email to the user
-					$row_email = $this->email_model->get_records_by_id(2);
+				//Sending email to the user
+				$row_email = $this->email_model->get_records_by_id(2);
 
-					$config = $this->email_drafts_model->email_configuration();
-					$this->email->initialize($config);
-					$this->email->clear(TRUE);
-					$this->email->from($row_email->from_email, $row_email->from_name);
-					$this->email->to($this->input->post('email'));
-					$mail_message = $this->email_drafts_model->jobseeker_signup($row_email->content, $job_seeker_array);
-					$this->email->subject($row_email->subject);
-					$this->email->message($mail_message);
-					$this->email->send();
+				$config = $this->email_drafts_model->email_configuration();
+				$this->email->initialize($config);
+				$this->email->clear(TRUE);
+				$this->email->from($row_email->from_email, $row_email->from_name);
+				$this->email->to($this->input->post('email'));
+				$mail_message = $this->email_drafts_model->jobseeker_signup($row_email->content, $job_seeker_array);
+				$this->email->subject($row_email->subject);
+				$this->email->message($mail_message);
+				$this->email->send();
 
-					echo $this->api->success_response_std('Registration successfull', $user_data);
-					return;
-				}
+				echo $this->api->success_response_std('Registration successfull', $user_data);
+				return;
+				// }
 			} catch (\Exception $e) {
 				header("HTTP/1.0 500 Internal Server Error");
 				echo $this->api->error_response('Registration failed');
