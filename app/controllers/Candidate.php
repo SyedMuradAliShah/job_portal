@@ -55,6 +55,9 @@ class Candidate extends CI_Controller
 			$photo = 'thumb/no_pic.jpg';
 		}
 
+
+		$rating = $this->jobseeker_experience_model->get_rating($decrypted_id, $this->session->userdata('user_id'));
+
 		$data['row'] 					= $row;
 		$data['title'] 					= $row->first_name . ' Profile';
 		$data['result_experience'] 		= $result_experience;
@@ -65,6 +68,7 @@ class Candidate extends CI_Controller
 		$data['latest_job_title']		= ($row_latest_exp) ? $row_latest_exp->job_title : '';
 		$data['latest_job_company_name'] = ($row_latest_exp) ? $row_latest_exp->company_name : '';
 		$data['photo'] 					= $photo;
+		$data['rating'] = $rating;
 		$this->load->view('candidate_view', $data);
 	}
 	public function get_cv($id = '')

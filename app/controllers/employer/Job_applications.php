@@ -86,4 +86,101 @@ class Job_Applications extends CI_Controller
 			return $e->getMessage();
 		}
 	}
+
+
+
+
+
+
+
+	public function update_rating()
+	{
+		if (!$this->session->userdata('user_id')) {
+			echo 'All fields are mandatory.';
+			exit;
+		}
+		$this->form_validation->set_rules('message', 'message', 'trim|required|strip_all_tags|time_diff');
+		$this->form_validation->set_rules('jsid', 'ID', 'trim|required|strip_all_tags');
+		$this->form_validation->set_rules('skillrating', 'skillrating', 'trim|strip_all_tags|time_diff');
+		$this->form_validation->set_rules('techrating', 'techrating', 'trim|strip_all_tags|time_diff');
+		$this->form_validation->set_rules('commrating', 'commrating', 'trim|strip_all_tags|time_diff');
+		$this->form_validation->set_rules('personrating', 'personrating', 'trim|strip_all_tags|time_diff');
+		$this->form_validation->set_error_delimiters('', '');
+		if ($this->form_validation->run() === FALSE) {
+			echo validation_errors();
+			exit;
+		}
+
+		if ($this->session->userdata('is_employer') != TRUE) {
+			echo 'You are not logged in with a employer account. Please login with a employer account to update rating.';
+			exit;
+		}
+
+		$decrypted_id = $this->custom_encryption->decrypt_data($this->input->post('jsid'));
+
+		$row_jobseeker 	= $this->job_seekers_model->get_job_seeker_by_id($decrypted_id);
+		$row_employer 	= $this->employers_model->get_employer_by_id($this->session->userdata('user_id'));
+		if (!$row_jobseeker) {
+			echo 'Something went wrong.';
+			exit;
+		}
+
+		if (!$row_employer) {
+			echo 'Something went wrong.';
+			exit;
+		}
+		$rating = $this->jobseeker_experience_model->get_rating($decrypted_id, $this->session->userdata('user_id'));
+		if ($rating->num_rows()) {
+			if ($this->jobseeker_experience_model->update_rating($decrypted_id, $this->session->userdata('user_id'), $this->input->post('message'), $this->input->post('skillrating'), $this->input->post('techrating'), $this->input->post('commrating'), $this->input->post('personrating'))) {
+				echo 'done';
+				exit;
+			}
+		}
+		echo 'Failed to update this rating.';
+	}
+	public function add_rating()
+	{
+		if (!$this->session->userdata('user_id')) {
+			echo 'All fields are mandatory.';
+			exit;
+		}
+		$this->form_validation->set_rules('message', 'message', 'trim|required|strip_all_tags|time_diff');
+		$this->form_validation->set_rules('jsid', 'ID', 'trim|required|strip_all_tags');
+		$this->form_validation->set_rules('skillrating', 'skillrating', 'trim|strip_all_tags|time_diff');
+		$this->form_validation->set_rules('techrating', 'techrating', 'trim|strip_all_tags|time_diff');
+		$this->form_validation->set_rules('commrating', 'commrating', 'trim|strip_all_tags|time_diff');
+		$this->form_validation->set_rules('personrating', 'personrating', 'trim|strip_all_tags|time_diff');
+		$this->form_validation->set_error_delimiters('', '');
+		if ($this->form_validation->run() === FALSE) {
+			echo validation_errors();
+			exit;
+		}
+
+		if ($this->session->userdata('is_employer') != TRUE) {
+			echo 'You are not logged in with a employer account. Please login with a employer account to add rating.';
+			exit;
+		}
+
+		$decrypted_id = $this->custom_encryption->decrypt_data($this->input->post('jsid'));
+
+		$row_jobseeker 	= $this->job_seekers_model->get_job_seeker_by_id($decrypted_id);
+		$row_employer 	= $this->employers_model->get_employer_by_id($this->session->userdata('user_id'));
+		if (!$row_jobseeker) {
+			echo 'Something went wrong.';
+			exit;
+		}
+
+		if (!$row_employer) {
+			echo 'Something went wrong.';
+			exit;
+		}
+		$rating = $this->jobseeker_experience_model->get_rating($decrypted_id, $this->session->userdata('user_id'));
+		if (!$rating->num_rows()) {
+			if ($this->jobseeker_experience_model->add_rating($decrypted_id, $this->session->userdata('user_id'), $this->input->post('message'), $this->input->post('skillrating'), $this->input->post('techrating'), $this->input->post('commrating'), $this->input->post('personrating'))) {
+				echo 'done';
+				exit;
+			}
+		}
+		echo 'Failed to add this rating.';
+	}
 }

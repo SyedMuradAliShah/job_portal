@@ -86,12 +86,12 @@ class User extends CI_Controller
 				return;
 			} catch (\Exception $e) {
 				header("HTTP/1.0 500 Internal Server Error");
-				echo $this->api->error_response('Error in code');
+				echo $this->api->error_response_std('Error in code');
 				return;
 			}
 		}
 		header("HTTP/1.0 400 Bad Request");
-		echo $this->api->error_response('Bad Request');
+		echo $this->api->error_response_std('Bad Request');
 		return;
 	}
 	public function skills()

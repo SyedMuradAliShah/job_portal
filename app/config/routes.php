@@ -74,6 +74,8 @@ $route['jobseeker-signup'] = 'Jobseeker_signup';
 $route['contact-us'] = 'Contact_us';
 //Employer Section
 $route['employer/job_applications/send_message_to_candidate']     = 'Employer/job_applications/send_message_to_candidate/$1';
+$route['employer/job_applications/update_rating']     = 'Employer/job_applications/update_rating';
+$route['employer/job_applications/add_rating']     = 'Employer/job_applications/add_rating';
 $route['employer/job_applications/(:any)']     = 'Employer/job_applications/index/$1';
 $route['employer/my_posted_jobs/(:any)']     = 'Employer/my_posted_jobs/index/$1';
 $route['employer/edit_posted_job/(:num)']     = 'Employer/edit_posted_job/index/$1';

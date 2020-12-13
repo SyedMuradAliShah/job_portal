@@ -45,9 +45,9 @@ Chat services
 
 - http://techdino.tk/api/my_account
 
-- http://techdino.tk/api/my_update
+- http://techdino.tk/api/my_account/update
 
-- http://techdino.tk/api/change_password
+- http://techdino.tk/api/my_account/change_password
 
-
+- http://techdino.tk/api/qrcode/set_qrdata  // You have to scan QR and then send data to this api.
 

@@ -9,11 +9,11 @@ class Qrcode extends CI_Controller
 		$this->ads = $this->ads_model->get_ads();
 	}
 
-	public function index()
+	public function index($job_id)
 	{
+		$row = $this->employers_model->get_employer_by_id($this->session->userdata('user_id'));
 		$data['ads_row'] = $this->ads;
-		$job_url = $this->uri->segment(3);
-		$row_posted_job = $this->posted_jobs_model->get_active_posted_job_by_id($job_url);
+		$row_posted_job = $this->posted_jobs_model->get_active_posted_job_by_id($job_id);
 		if (!$row_posted_job) {
 			$this->load->view('404_view');
 			return;
@@ -37,6 +37,8 @@ class Qrcode extends CI_Controller
 		$data['currently_opened_jobs'] = $currently_opened_jobs;
 		$data['title'] = 'SCAN QR ' . $row_posted_job->job_title;
 		$data['cpt_code'] = create_ml_captcha();
+
+		$data['row'] 				= $row;
 		$this->load->view('employer/qrcode_view', $data);
 	}
 }
