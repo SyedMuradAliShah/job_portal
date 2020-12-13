@@ -65,7 +65,9 @@
                           </div>
 
                           <div class="col-md-4">
-                            <a href="<?= base_url('employer/qrcode/' . $row_jobs->ID) ?>" style="text-decoration:none;" class="generate-qr-code"><span class="label label-success">View QR</span></a>
+                            <?php if ($row_jobs->sts !== 'pending') : ?>
+                              <a href="<?= base_url('employer/qrcode/' . $row_jobs->ID) ?>" style="text-decoration:none;" class="generate-qr-code"><span class="label label-success">View QR</span></a>
+                            <?php endif; ?>
                           </div>
                         </div>
                         <div class="clear"> </div>
