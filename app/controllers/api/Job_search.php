@@ -50,8 +50,9 @@ class Job_search extends CI_Controller
 			$total_rows = $this->posted_jobs_model->count_searched_job_records($param, $param2);
 			$obj_result = $this->posted_jobs_model->get_searched_jobs($param, $param2, 40, 1);
 			foreach ($obj_result as $key => $value) {
-				$qu[$value->ID][$key] = $value;
-				$qu[$value->ID]['applied'] = $this->is_already_applied_for_job($this->input->post('user_id'), $value->ID);
+				$qu[$key] = $value;
+				$qu['applied'] = $this->is_already_applied_for_job($this->input->post('user_id'), $value->ID);
+				$response[] = $qu; 
 			}
 			//Left Side Starts
 			$left_side_array = $this->left_side_data($param);
@@ -60,7 +61,7 @@ class Job_search extends CI_Controller
 			$current_records = ($current_records > $total_rows) ? $total_rows : $current_records;
 			$data['total_rows'] = $total_rows;
 			$data['page'] = $current_records;
-			$data['result'] = $qu;
+			$data['result'] = $response;
 			$data['param'] = $param;
 			$data['title_group'] = $left_side_array['title_group'];
 			$data['city_group'] = $left_side_array['city_group'];

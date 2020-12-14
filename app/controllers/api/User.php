@@ -481,20 +481,21 @@ class User extends CI_Controller
 			try {
 				if ($data = $this->user->one2one_users($this->input->post('my_user_id'), $status)) {
 					$reseponse = [];
-					// $i = 1;
+					// $i = 0;
 					foreach ($data as $user) :
 						if ($status == 'jobseeker' && ($user->sent_from == 'employer' || $user->sent_from == 'jobseeker')) :
-							$reseponse[$user->employer_id]['employer_id'] = $user->employer_id;
-							$reseponse[$user->employer_id]['name'] = $user->employer_name;
-							$reseponse[$user->employer_id]['last_message'] = $user->message;
-						// $i++;
+							$res['employer_id'] = $user->employer_id;
+							$res['name'] = $user->employer_name;
+							$res['last_message'] = $user->message;
+							$reseponse[] = $res;
 						endif;
 						if ($status == 'employer' && ($user->sent_from == 'employer' || $user->sent_from == 'jobseeker')) :
-							$reseponse[$user->jobseeker_id]['jobseeker_id'] = $user->jobseeker_id;
-							$reseponse[$user->jobseeker_id]['name'] = $user->jobseeker_name;
-							$reseponse[$user->jobseeker_id]['last_message'] = $user->message;
-						// $i++;
+							$res['jobseeker_id'] = $user->jobseeker_id;
+							$res['name'] = $user->jobseeker_name;
+							$res['last_message'] = $user->message;
+							$reseponse[] = $res;
 						endif;
+						// $i++;
 					endforeach;
 
 					echo $this->api->success_response_std('SUCCESS', $reseponse);

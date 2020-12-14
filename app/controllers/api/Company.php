@@ -46,15 +46,17 @@ class Company extends CI_Controller
 			if (!file_exists(realpath(APPPATH . '../public/uploads/employer/' . $company_logo))) {
 				$company_logo = 'no_pic.jpg';
 			}
+			
 			foreach ($result_posted_jobs as $key => $value) {
-				$qu[$value->ID][$key] = $value;
-				$qu[$value->ID]['applied'] = $this->is_already_applied_for_job($this->input->post('user_id'), $value->ID);
+				$qu[$key] = $value;
+				$qu['applied'] = $this->is_already_applied_for_job($this->input->post('user_id'), $value->ID);
+				$response[] = $qu; 
 			}
 
 			$company_website = ($row_company->company_website != '') ? validate_company_url($row_company->company_website) : '';
 			$data['row_company'] 		= $row_company;
 			$data['total_opened_jobs'] 	= $total_opened_jobs;
-			$data['result_posted_jobs'] = $qu;
+			$data['result_posted_jobs'] = $response;
 			$data['company_logo'] 		= $company_logo;
 			$data['company_website'] 	= $company_website;
 			echo $this->api->success_response($data);
