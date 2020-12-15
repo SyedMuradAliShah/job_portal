@@ -48,11 +48,23 @@ class Matching_Jobs extends CI_Controller
 
 			
 			foreach ($result_jobs as $key => $value) {
-				$qu[$key] = $value;
+				$qu['ID'] = $value->ID;
+				$qu['job_title'] = $value->job_title;
+				$qu['job_slug'] = $value->job_slug;
+				$qu['employer_ID'] = $value->employer_ID;
+				$qu['company_ID'] = $value->company_ID;
+				$qu['job_description'] = $value->job_description;
+				$qu['city'] = $value->city;
+				$qu['dated'] = $value->dated;
+				$qu['last_date'] = $value->last_date;
+				$qu['is_featured'] = $value->is_featured;
+				$qu['sts'] = $value->sts;
+				$qu['company_name'] = $value->company_name;
+				$qu['company_logo'] = $value->company_logo;
+				$qu['company_slug'] = $value->company_slug;
 				$qu['applied'] = $this->is_already_applied_for_job($this->input->post('user_id'), $value->ID);
 				$response[] = $qu; 
 			}
-
 
 			$data['result'] = $response;
 			echo $this->api->success_response($data);
