@@ -83,13 +83,13 @@ class Post_New_Job extends CI_Controller {
 		$job_slug = $this->make_job_slug($row->company_slug, $this->input->post('job_title'), $this->input->post('city'), $job_id);
 		$this->posted_jobs_model->update_posted_job($job_id, array('job_slug' => $job_slug));
 		
-		// Reducing 1 if payment plan is active
-		if($row_settings->payment_plan=='1'){
-			$allowed_job_qty = $row->allowed_job_qty-1;
-			$allowed_job_qty = ($allowed_job_qty<0)?0:$allowed_job_qty;
-			$this->employers_model->update($this->session->userdata('user_id'), array('allowed_job_qty'=>$allowed_job_qty));	
-		}
-		$this->add_skill($required_skills);
+		//Reducing 1 if payment plan is active
+		// if($row_settings->payment_plan=='1'){
+		// 	$allowed_job_qty = $row->allowed_job_qty-1;
+		// 	$allowed_job_qty = ($allowed_job_qty<0)?0:$allowed_job_qty;
+		// 	$this->employers_model->update($this->session->userdata('user_id'), array('allowed_job_qty'=>$allowed_job_qty));	
+		// }
+		//$this->add_skill($required_skills);
 		$this->session->set_flashdata('msg', '<div class="alert alert-success"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>Success!</strong> New job has been posted successfully.</div>');
 		redirect(base_url('employer/my_posted_jobs'),'');
 		
